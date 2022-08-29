@@ -1,0 +1,20 @@
+﻿<Window x:Class="MikhaleuLibrary.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MikhaleuLibrary"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="1024" Width="1280">
+    <Grid>
+        <StackPanel x:Name="MainGrid">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock x:Name="filePathString" HorizontalAlignment="Center" Margin="20"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <Button x:Name="fileSelectButton" Content="Choose file with books data" Click="File_Select_Button_Click" Width="250" Height="30" Margin="20"/>
+                <Button Grid.Row="1" x:Name="loadToDBButton" Content="Load data from the file to the database" Click="Load_Button_Click" Width="250" Height="30" Margin="20"/>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</Window>
