@@ -12,7 +12,7 @@
 
         public const string UserFilesDirectoryName = "User Files";
 
-        public const string ExcelFileName = "LibraryData.xls";
+        public const string ExcelFileName = "LibraryData.xlsx";
 
         public const string XmlFileName = "LibraryData.xml";
 

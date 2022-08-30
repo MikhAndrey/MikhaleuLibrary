@@ -174,6 +174,9 @@
   <data name="FileSelectButtonCaption" xml:space="preserve">
     <value>Choose file with books data</value>
   </data>
+  <data name="FileWasReadBefore" xml:space="preserve">
+    <value>Data from this file was loaded to the database earlier. Do you want to load data from this file once again?</value>
+  </data>
   <data name="FilterButtonCaption" xml:space="preserve">
     <value>Get filtered data from the database</value>
   </data>
@@ -204,6 +207,9 @@
   <data name="ReadFromFileErrorDescription" xml:space="preserve">
     <value>Read from file error</value>
   </data>
+  <data name="ReadFromFileErrorWarning" xml:space="preserve">
+    <value>File read warning</value>
+  </data>
   <data name="ReadFromSourceFileFault" xml:space="preserve">
     <value>Unable to read from source file with library data. Try again</value>
   </data>
@@ -219,6 +225,9 @@
   <data name="SuccessfulDBWriteMessage" xml:space="preserve">
     <value>The information about the books was successfully recorded in the database. Full information about errors that occurred during recording is in the file </value>
   </data>
+  <data name="SuccessfulExcelFileWriteMessage" xml:space="preserve">
+    <value>Required books info was successfully written in the file</value>
+  </data>
   <data name="SuccessfulXMLFileWriteMessage" xml:space="preserve">
     <value>Required books info was successfully written in the file </value>
   </data>
@@ -233,6 +242,9 @@
   </data>
   <data name="WriteToErrorsFileFault" xml:space="preserve">
     <value>An error occurred when writing data to a file with errors. Try again</value>
+  </data>
+  <data name="WriteToExcelFileFault" xml:space="preserve">
+    <value>An error occurred when writing data to Excel file. Try again</value>
   </data>
   <data name="WriteToFileErrorDescription" xml:space="preserve">
     <value>Write to file error</value>

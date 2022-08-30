@@ -63,6 +63,8 @@ namespace MikhaleuLibrary
 
         public ObservableCollection<ReadFromFileError> _errors = new();
 
+        private List<string> _alreadyReadFileNames = new();
+
         private List<Book> _filteredBooks;
 
         private void UpdateErrorsViewVisibility()
@@ -93,6 +95,15 @@ namespace MikhaleuLibrary
 
         private async void Load_From_DB_Button_Click(object sender, RoutedEventArgs e)
         {
+            if (_alreadyReadFileNames.Contains(_sourceFileName))
+            {
+                MessageBoxResult loadFileConfirm = MessageBox.Show(Messages.FileWasReadBefore,
+                            Messages.ReadFromFileErrorWarning,
+                            MessageBoxButton.YesNo,
+                            MessageBoxImage.Question);
+                if (loadFileConfirm == MessageBoxResult.No)
+                    return;
+            }
             loadToDBButton.IsEnabled = false;
             _errors.Clear();
             const string userFilesDirectoryPath = FileConstants.UserFilesDirectoryPath + FileConstants.UserFilesDirectoryName;
@@ -153,6 +164,7 @@ namespace MikhaleuLibrary
                                 Messages.SuccessMessage,
                                 MessageBoxButton.OK,
                                 MessageBoxImage.Information);
+                            _alreadyReadFileNames.Add(_sourceFileName);
                             loadToDBButton.IsEnabled = true;
                             UpdateErrorsViewVisibility();
                             return;
@@ -280,6 +292,37 @@ namespace MikhaleuLibrary
 
         private void Load_To_Excel_Button_Click(object sender, RoutedEventArgs e)
         {
+            const string userFilesDirectoryPath = FileConstants.UserFilesDirectoryPath + FileConstants.UserFilesDirectoryName;
+            try
+            {
+                if (!Directory.Exists(userFilesDirectoryPath))
+                    Directory.CreateDirectory(userFilesDirectoryPath);
+            }
+            catch
+            {
+                MessageBox.Show(Messages.UnableToCreateDirectoryMessage,
+                    Messages.DirectoryCreationFaultCaption,
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+                return;
+            }
+            const string pathSeparator = "/";
+            const string ExcelFilePath = userFilesDirectoryPath + pathSeparator + FileConstants.ExcelFileName;
+            try{
+                FileHandler.AddBooksToExcelFile(_filteredBooks, ExcelFilePath);
+            }
+            catch
+            {
+                MessageBox.Show(Messages.WriteToExcelFileFault,
+                    Messages.WriteToFileErrorDescription,
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+                return;
+            }
+            MessageBox.Show(Messages.SuccessfulExcelFileWriteMessage + FileConstants.UserFilesDirectoryName + pathSeparator + FileConstants.ExcelFileName,
+                Messages.SuccessMessage,
+                MessageBoxButton.OK,
+                MessageBoxImage.Information);
         }
 
         private void Load_To_XML_Button_Click(object sender, RoutedEventArgs e)

@@ -232,6 +232,15 @@ namespace MikhaleuLibrary.Resources {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Data from this file was loaded to the database earlier. Do you want to load data from this file once again?.
+        /// </summary>
+        internal static string FileWasReadBefore {
+            get {
+                return ResourceManager.GetString("FileWasReadBefore", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Get filtered data from the database.
         /// </summary>
         internal static string FilterButtonCaption {
@@ -322,6 +331,15 @@ namespace MikhaleuLibrary.Resources {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на File read warning.
+        /// </summary>
+        internal static string ReadFromFileErrorWarning {
+            get {
+                return ResourceManager.GetString("ReadFromFileErrorWarning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Unable to read from source file with library data. Try again.
         /// </summary>
         internal static string ReadFromSourceFileFault {
@@ -367,6 +385,15 @@ namespace MikhaleuLibrary.Resources {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Required books info was successfully written in the file.
+        /// </summary>
+        internal static string SuccessfulExcelFileWriteMessage {
+            get {
+                return ResourceManager.GetString("SuccessfulExcelFileWriteMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Required books info was successfully written in the file .
         /// </summary>
         internal static string SuccessfulXMLFileWriteMessage {
@@ -408,6 +435,15 @@ namespace MikhaleuLibrary.Resources {
         internal static string WriteToErrorsFileFault {
             get {
                 return ResourceManager.GetString("WriteToErrorsFileFault", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на An error occurred when writing data to Excel file. Try again.
+        /// </summary>
+        internal static string WriteToExcelFileFault {
+            get {
+                return ResourceManager.GetString("WriteToExcelFileFault", resourceCulture);
             }
         }
         
