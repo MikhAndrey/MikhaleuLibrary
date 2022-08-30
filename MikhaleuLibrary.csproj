@@ -8,6 +8,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="User Files\**" />
+    <EmbeddedResource Remove="User Files\**" />
+    <None Remove="User Files\**" />
+    <Page Remove="User Files\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="library_data.csv" />
   </ItemGroup>
 

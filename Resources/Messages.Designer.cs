@@ -61,6 +61,33 @@ namespace MikhaleuLibrary.Resources {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Author birthdate.
+        /// </summary>
+        internal static string BirthDateLabel {
+            get {
+                return ResourceManager.GetString("BirthDateLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Book name.
+        /// </summary>
+        internal static string BookNameLabel {
+            get {
+                return ResourceManager.GetString("BookNameLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Book year.
+        /// </summary>
+        internal static string BookYearLabel {
+            get {
+                return ResourceManager.GetString("BookYearLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Database Error.
         /// </summary>
         internal static string DatabaseErrorDescription {
@@ -70,11 +97,29 @@ namespace MikhaleuLibrary.Resources {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Unable to get data from the database.
+        /// </summary>
+        internal static string DatabaseGetDataError {
+            get {
+                return ResourceManager.GetString("DatabaseGetDataError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Unable to save library data in the database. Try again.
         /// </summary>
         internal static string DatabaseSaveError {
             get {
                 return ResourceManager.GetString("DatabaseSaveError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Load data from the file to the database.
+        /// </summary>
+        internal static string DBLoadButtonCaption {
+            get {
+                return ResourceManager.GetString("DBLoadButtonCaption", resourceCulture);
             }
         }
         
@@ -133,11 +178,74 @@ namespace MikhaleuLibrary.Resources {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на There is no books with requested params.
+        /// </summary>
+        internal static string EmptyResponseMessage {
+            get {
+                return ResourceManager.GetString("EmptyResponseMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Error description.
+        /// </summary>
+        internal static string ErrorDescriptionColumnCaption {
+            get {
+                return ResourceManager.GetString("ErrorDescriptionColumnCaption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на First {0} errors of reading from file with books data.
+        /// </summary>
+        internal static string ErrorsTableCaption {
+            get {
+                return ResourceManager.GetString("ErrorsTableCaption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Load filtered data to Excel file.
+        /// </summary>
+        internal static string ExcelButtonCaption {
+            get {
+                return ResourceManager.GetString("ExcelButtonCaption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на File with books data: .
         /// </summary>
         internal static string FileNameDeclaration {
             get {
                 return ResourceManager.GetString("FileNameDeclaration", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Choose file with books data.
+        /// </summary>
+        internal static string FileSelectButtonCaption {
+            get {
+                return ResourceManager.GetString("FileSelectButtonCaption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Get filtered data from the database.
+        /// </summary>
+        internal static string FilterButtonCaption {
+            get {
+                return ResourceManager.GetString("FilterButtonCaption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Author first name.
+        /// </summary>
+        internal static string FirstNameLabel {
+            get {
+                return ResourceManager.GetString("FirstNameLabel", resourceCulture);
             }
         }
         
@@ -169,6 +277,33 @@ namespace MikhaleuLibrary.Resources {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Author last name.
+        /// </summary>
+        internal static string LastNameLabel {
+            get {
+                return ResourceManager.GetString("LastNameLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Line number.
+        /// </summary>
+        internal static string LineNumberColumnCaption {
+            get {
+                return ResourceManager.GetString("LineNumberColumnCaption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Please, mark at least one field that you want to include in your request.
+        /// </summary>
+        internal static string NoMarkedFieldsMessage {
+            get {
+                return ResourceManager.GetString("NoMarkedFieldsMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Book year must be an integer.
         /// </summary>
         internal static string NonIntegerYearMessage {
@@ -196,6 +331,33 @@ namespace MikhaleuLibrary.Resources {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Request error.
+        /// </summary>
+        internal static string RequestErrorDeclaration {
+            get {
+                return ResourceManager.GetString("RequestErrorDeclaration", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Mark fields that you want to include in your request and enter params for search in the database .
+        /// </summary>
+        internal static string RequestsSectionCaption {
+            get {
+                return ResourceManager.GetString("RequestsSectionCaption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Requested data was successfully got from the database and is ready to be loaded in the file.
+        /// </summary>
+        internal static string SuccessfulDataFiltration {
+            get {
+                return ResourceManager.GetString("SuccessfulDataFiltration", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на The information about the books was successfully recorded in the database. Full information about errors that occurred during recording is in the file .
         /// </summary>
         internal static string SuccessfulDBWriteMessage {
@@ -205,11 +367,29 @@ namespace MikhaleuLibrary.Resources {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Required books info was successfully written in the file .
+        /// </summary>
+        internal static string SuccessfulXMLFileWriteMessage {
+            get {
+                return ResourceManager.GetString("SuccessfulXMLFileWriteMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Success!.
         /// </summary>
         internal static string SuccessMessage {
             get {
                 return ResourceManager.GetString("SuccessMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Author surname.
+        /// </summary>
+        internal static string SurnameLabel {
+            get {
+                return ResourceManager.GetString("SurnameLabel", resourceCulture);
             }
         }
         
@@ -241,6 +421,15 @@ namespace MikhaleuLibrary.Resources {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на An error occurred when writing data to XML file. Try again.
+        /// </summary>
+        internal static string WriteToXMLFileFault {
+            get {
+                return ResourceManager.GetString("WriteToXMLFileFault", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Author&apos;s birthdate has incorrect format.
         /// </summary>
         internal static string WrongBirthdateConversionMessage {
@@ -255,6 +444,24 @@ namespace MikhaleuLibrary.Resources {
         internal static string WrongClicksOrderMessage {
             get {
                 return ResourceManager.GetString("WrongClicksOrderMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Your request has the following errors: .
+        /// </summary>
+        internal static string WrongRequestMessage {
+            get {
+                return ResourceManager.GetString("WrongRequestMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Load filtered data to XML file.
+        /// </summary>
+        internal static string XMLButtonCaption {
+            get {
+                return ResourceManager.GetString("XMLButtonCaption", resourceCulture);
             }
         }
     }

@@ -27,7 +27,9 @@ namespace MikhaleuLibrary.Services
                 return null;
             }
             string[] possibleBookProperties = posiibleBookItem.Split(_adjacentFieldsSeparator);
-            if (!BookPropertyChecker.IsBookDataProper(possibleBookProperties, out ConversionErrorDescription, out DateTime? birthDate, out int bookYear))
+            foreach (string property in possibleBookProperties)
+                property.Trim();
+            if (!BookPropertyChecker.IsBookDataFromFileProper(possibleBookProperties, out ConversionErrorDescription, out DateTime? birthDate, out int bookYear))
             {
                 ConversionErrorDescription = ConversionErrorDescription.TrimEnd(_errorMessagesSeparator);
                 return null;

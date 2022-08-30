@@ -1,8 +1,9 @@
 ﻿using System.IO;
 using System.Threading.Tasks;
 using MikhaleuLibrary.Model.DBModels;
-using System.Xml.Serialization;
+using System.Xml.Linq;
 using Excel = Microsoft.Office.Interop.Excel;
+using System.Collections.Generic;
 namespace MikhaleuLibrary.Utils
 {
 
@@ -22,9 +23,25 @@ namespace MikhaleuLibrary.Utils
             await writer.WriteLineAsync(text);
         }
 
-        public static void AddBookToXMLFile(FileStream file, XmlSerializer writer, Book book)
+        public static void AddBooksToXMLFile(List<Book> books, string filePath)
         {
-            writer.Serialize(file, book);
+            XDocument xdoc = new XDocument();
+            XElement libraryElem = new("Library");
+            xdoc.Add(libraryElem);
+            foreach (Book book in books)
+            {
+                
+                    XElement bookElem = new XElement("Book",
+                        new XAttribute("id", book.Id),
+                        new XElement("FirstName", book.FirstName),
+                        new XElement("Surname", book.Surname),
+                        new XElement("LastName", book.LastName),
+                        new XElement("Birthdate", book.BirthDate),
+                        new XElement("BookName", book.BookName),
+                        new XElement("BookYear", book.BookYear));
+                    libraryElem.Add(bookElem);
+            }
+            xdoc.Save(filePath);
         }
 
         public static void AddBookToExcelFile(Excel.Worksheet sheet, int rowIndex, Book book)

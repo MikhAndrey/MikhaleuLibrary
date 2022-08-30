@@ -8,110 +8,155 @@ namespace MikhaleuLibrary.Helpers
     {
         private static char _errorMessagesSeparator = FileConstants.ErrorMessagesSeparator;
 
-        public static bool IsBookDataProper(string[] bookProperties, out string? errorDescription, out DateTime? authorBirthdate, out int bookYear)
+        public static bool IsBookDataFromFileProper(string[] bookProperties, out string? errorDescription, out DateTime? authorBirthdate, out int bookYear)
         {
             errorDescription = null;
             authorBirthdate = null;
             bookYear = 0;
-            bool[] bookPropertyChecks = {!IsPropertiesCountOptimal(bookProperties, ref errorDescription),
-                !IsAuthorNameCorrect(bookProperties[0], ref errorDescription),
-                !IsAuthorSurnameCorrect(bookProperties[1], ref errorDescription),
-                !IsAuthorBirthdateCorrect(bookProperties[3], ref errorDescription, ref authorBirthdate),
-                !IsBookNameCorrect(bookProperties[4], ref errorDescription),
-                !IsBookYearCorrect(bookProperties[5], ref errorDescription, ref bookYear) };
-            if (Array.IndexOf(bookPropertyChecks, true) != -1)
+            if (!IsPropertiesCountOptimal(bookProperties))
+                errorDescription += Messages.LackOfParamsMessage + _errorMessagesSeparator;
+            if (!IsAuthorNameNotNullOrWhiteSpace(bookProperties[0]))
+                errorDescription += Messages.EmptyAuthorNameMessage + _errorMessagesSeparator;
+            if (!IsAuthorSurnameNotNullOrWhiteSpace(bookProperties[1]))
+                errorDescription += Messages.EmptyAuthorSurnameMessage + _errorMessagesSeparator;
+            if (!IsDateNotNullOrWhiteSpace(bookProperties[3]))
+                errorDescription += Messages.EmptyBirthdateMessage + _errorMessagesSeparator;
+            if (!IsDateCorrect(bookProperties[3], ref authorBirthdate))
+                errorDescription += Messages.WrongBirthdateConversionMessage + _errorMessagesSeparator;
+            if (!IsDateFromPast(ref authorBirthdate))
+                errorDescription += Messages.FutureAuthorBirthdateMessage + _errorMessagesSeparator;
+            if (!IsBookNameNotNullOrWhiteSpace(bookProperties[4]))
+                errorDescription += Messages.EmptyBookNameMessage + _errorMessagesSeparator;
+            if (!IsYearNotNullOrWhiteSpace(bookProperties[5]))
+                errorDescription += Messages.EmptyBookYearMessage + _errorMessagesSeparator;
+            if (!IsYearInteger(bookProperties[5], ref bookYear))
+                errorDescription += Messages.NonIntegerYearMessage + _errorMessagesSeparator;
+            if (!IsYearFromPast(bookYear))
+                errorDescription += Messages.NonIntegerYearMessage + _errorMessagesSeparator;
+            if (errorDescription != null)
                 return false;
             return true;
         }
 
-        private static bool IsPropertiesCountOptimal(string[] properties, ref string? errorDescription)
+        public static bool IsUserRequestProper(string[] bookProperties, bool?[] isParamNeedsCheck, out string? errorDescription, out DateTime? authorBirthdate, out int bookYear)
+        {
+            errorDescription = null;
+            authorBirthdate = null;
+            bookYear = 0;
+            if (isParamNeedsCheck[0] == true)
+            {
+                if (!IsAuthorNameNotNullOrWhiteSpace(bookProperties[0]))
+                    errorDescription += Messages.EmptyAuthorNameMessage + _errorMessagesSeparator;
+            }
+            if (isParamNeedsCheck[1] == true)
+            {
+                if (!IsAuthorSurnameNotNullOrWhiteSpace(bookProperties[1]))
+                    errorDescription += Messages.EmptyAuthorSurnameMessage + _errorMessagesSeparator;
+            }
+            if (isParamNeedsCheck[3] == true)
+            {
+                if (!IsDateNotNullOrWhiteSpace(bookProperties[3]))
+                    errorDescription += Messages.EmptyBirthdateMessage + _errorMessagesSeparator;
+                if (!IsDateCorrect(bookProperties[3], ref authorBirthdate))
+                    errorDescription += Messages.WrongBirthdateConversionMessage + _errorMessagesSeparator;
+                if (!IsDateFromPast(ref authorBirthdate))
+                    errorDescription += Messages.FutureAuthorBirthdateMessage + _errorMessagesSeparator;
+            }
+            if (isParamNeedsCheck[4] == true)
+            {
+                if (!IsBookNameNotNullOrWhiteSpace(bookProperties[4]))
+                    errorDescription += Messages.EmptyBookNameMessage + _errorMessagesSeparator;
+            }
+            if (isParamNeedsCheck[5] == true)
+            {
+                if (!IsYearNotNullOrWhiteSpace(bookProperties[5]))
+                    errorDescription += Messages.EmptyBookYearMessage + _errorMessagesSeparator;
+                if (!IsYearInteger(bookProperties[5], ref bookYear))
+                    errorDescription += Messages.NonIntegerYearMessage + _errorMessagesSeparator;
+                if (!IsYearFromPast(bookYear))
+                    errorDescription += Messages.FutureBookYearMessage + _errorMessagesSeparator;
+            }
+            if (errorDescription != null)
+                return false;
+            return true;
+        }
+
+        private static bool IsPropertiesCountOptimal(string[] properties)
         {
             if (properties.Length == EntityConstants.BookPropertiesCount)
                 return true;
-            else
-            {
-                errorDescription += Messages.LackOfParamsMessage + _errorMessagesSeparator;
-                return false;
-            }
+            return false;
         }
 
-        private static bool IsAuthorNameCorrect(string? authorName, ref string? errorDescription)
+        private static bool IsAuthorNameNotNullOrWhiteSpace(string? authorName)
         {
             if (!string.IsNullOrWhiteSpace(authorName))
                 return true;
-            else
-            {
-                errorDescription += Messages.EmptyAuthorNameMessage + _errorMessagesSeparator;
-                return false;
-            }
+            return false;
         }
 
-        private static bool IsAuthorSurnameCorrect(string? authorSurname, ref string? errorDescription)
+        private static bool IsAuthorSurnameNotNullOrWhiteSpace(string? authorSurname)
         {
             if (!string.IsNullOrWhiteSpace(authorSurname))
                 return true;
-            else
-            {
-                errorDescription += Messages.EmptyAuthorSurnameMessage + _errorMessagesSeparator;
-                return false;
-            }
+            return false;
         }
 
-        private static bool IsAuthorBirthdateCorrect(string? authorBirthdate, ref string? errorDescription, ref DateTime? correctAuthorBirthdate)
+        private static bool IsDateNotNullOrWhiteSpace(string? date)
         {
-            if (string.IsNullOrWhiteSpace(authorBirthdate))
-            {
-                errorDescription += Messages.EmptyBirthdateMessage + _errorMessagesSeparator;
-                return false;
-            }
+            if (!string.IsNullOrWhiteSpace(date))
+                return true;
+            return false;
+        }
+
+        private static bool IsDateCorrect(string? date, ref DateTime? correctDate)
+        {
             try
             {
-                correctAuthorBirthdate = DateTime.Parse(authorBirthdate);
+                correctDate = DateTime.Parse(date);
+                return true;
             }
             catch
             {
-                errorDescription += Messages.WrongBirthdateConversionMessage + _errorMessagesSeparator;
                 return false;
             }
+        }
+
+        private static bool IsDateFromPast(ref DateTime? date)
+        {
             DateTime actualDate = DateTime.Now;
-            if (correctAuthorBirthdate >= actualDate)
-            {
-                errorDescription += Messages.FutureAuthorBirthdateMessage + _errorMessagesSeparator;
+            if (date >= actualDate)
                 return false;
-            }
             return true;
         }
 
-        private static bool IsBookNameCorrect(string? bookName, ref string? errorDescription)
+        private static bool IsBookNameNotNullOrWhiteSpace(string? bookName)
         {
             if (!string.IsNullOrWhiteSpace(bookName))
                 return true;
-            else
-            {
-                errorDescription += Messages.EmptyBookNameMessage + _errorMessagesSeparator;
-                return false;
-            }
+            return false;
         }
 
-        private static bool IsBookYearCorrect(string? bookYear, ref string? errorDescription,  ref int realBookYear)
+        private static bool IsYearNotNullOrWhiteSpace(string? year)
         {
-            if (string.IsNullOrWhiteSpace(bookYear))
-            {
-                errorDescription += Messages.EmptyBookYearMessage + _errorMessagesSeparator;
-                return false;
-            }
-            bool isYearInteger = int.TryParse(bookYear, out realBookYear);
+            if (!string.IsNullOrWhiteSpace(year))
+                return true;
+            return false;
+        }
+
+        private static bool IsYearInteger(string? year, ref int correctYear)
+        {
+            bool isYearInteger = int.TryParse(year, out correctYear);
             if (!isYearInteger)
-            {
-                errorDescription += Messages.NonIntegerYearMessage + _errorMessagesSeparator;
                 return false;
-            }
+            return true;
+        }
+
+        private static bool IsYearFromPast(int year)
+        {
             DateTime actualDate = DateTime.Now;
-            if (realBookYear > actualDate.Year)
-            {
-                errorDescription += Messages.FutureBookYearMessage + _errorMessagesSeparator;
+            if (year > actualDate.Year)
                 return false;
-            }
             return true;
         }
     }

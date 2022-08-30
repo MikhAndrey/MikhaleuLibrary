@@ -117,11 +117,26 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="BirthDateLabel" xml:space="preserve">
+    <value>Author birthdate</value>
+  </data>
+  <data name="BookNameLabel" xml:space="preserve">
+    <value>Book name</value>
+  </data>
+  <data name="BookYearLabel" xml:space="preserve">
+    <value>Book year</value>
+  </data>
   <data name="DatabaseErrorDescription" xml:space="preserve">
     <value>Database Error</value>
   </data>
+  <data name="DatabaseGetDataError" xml:space="preserve">
+    <value>Unable to get data from the database</value>
+  </data>
   <data name="DatabaseSaveError" xml:space="preserve">
     <value>Unable to save library data in the database. Try again</value>
+  </data>
+  <data name="DBLoadButtonCaption" xml:space="preserve">
+    <value>Load data from the file to the database</value>
   </data>
   <data name="DirectoryCreationFaultCaption" xml:space="preserve">
     <value>Directory creation fault</value>
@@ -141,8 +156,29 @@
   <data name="EmptyBookYearMessage" xml:space="preserve">
     <value>Book year can't be empty</value>
   </data>
+  <data name="EmptyResponseMessage" xml:space="preserve">
+    <value>There is no books with requested params</value>
+  </data>
+  <data name="ErrorDescriptionColumnCaption" xml:space="preserve">
+    <value>Error description</value>
+  </data>
+  <data name="ErrorsTableCaption" xml:space="preserve">
+    <value>First {0} errors of reading from file with books data</value>
+  </data>
+  <data name="ExcelButtonCaption" xml:space="preserve">
+    <value>Load filtered data to Excel file</value>
+  </data>
   <data name="FileNameDeclaration" xml:space="preserve">
     <value>File with books data: </value>
+  </data>
+  <data name="FileSelectButtonCaption" xml:space="preserve">
+    <value>Choose file with books data</value>
+  </data>
+  <data name="FilterButtonCaption" xml:space="preserve">
+    <value>Get filtered data from the database</value>
+  </data>
+  <data name="FirstNameLabel" xml:space="preserve">
+    <value>Author first name</value>
   </data>
   <data name="FutureAuthorBirthdateMessage" xml:space="preserve">
     <value>Author's birthdate can't be later than the current date</value>
@@ -153,6 +189,15 @@
   <data name="LackOfParamsMessage" xml:space="preserve">
     <value>One or more data about the book is missing</value>
   </data>
+  <data name="LastNameLabel" xml:space="preserve">
+    <value>Author last name</value>
+  </data>
+  <data name="LineNumberColumnCaption" xml:space="preserve">
+    <value>Line number</value>
+  </data>
+  <data name="NoMarkedFieldsMessage" xml:space="preserve">
+    <value>Please, mark at least one field that you want to include in your request</value>
+  </data>
   <data name="NonIntegerYearMessage" xml:space="preserve">
     <value>Book year must be an integer</value>
   </data>
@@ -162,11 +207,26 @@
   <data name="ReadFromSourceFileFault" xml:space="preserve">
     <value>Unable to read from source file with library data. Try again</value>
   </data>
+  <data name="RequestErrorDeclaration" xml:space="preserve">
+    <value>Request error</value>
+  </data>
+  <data name="RequestsSectionCaption" xml:space="preserve">
+    <value>Mark fields that you want to include in your request and enter params for search in the database </value>
+  </data>
+  <data name="SuccessfulDataFiltration" xml:space="preserve">
+    <value>Requested data was successfully got from the database and is ready to be loaded in the file</value>
+  </data>
   <data name="SuccessfulDBWriteMessage" xml:space="preserve">
     <value>The information about the books was successfully recorded in the database. Full information about errors that occurred during recording is in the file </value>
   </data>
+  <data name="SuccessfulXMLFileWriteMessage" xml:space="preserve">
+    <value>Required books info was successfully written in the file </value>
+  </data>
   <data name="SuccessMessage" xml:space="preserve">
     <value>Success!</value>
+  </data>
+  <data name="SurnameLabel" xml:space="preserve">
+    <value>Author surname</value>
   </data>
   <data name="UnableToCreateDirectoryMessage" xml:space="preserve">
     <value>Unable to create directory for file with errors of reading from source file with library data. Try again</value>
@@ -177,10 +237,19 @@
   <data name="WriteToFileErrorDescription" xml:space="preserve">
     <value>Write to file error</value>
   </data>
+  <data name="WriteToXMLFileFault" xml:space="preserve">
+    <value>An error occurred when writing data to XML file. Try again</value>
+  </data>
   <data name="WrongBirthdateConversionMessage" xml:space="preserve">
     <value>Author's birthdate has incorrect format</value>
   </data>
   <data name="WrongClicksOrderMessage" xml:space="preserve">
     <value>Please, choose file from which you want to select data</value>
+  </data>
+  <data name="WrongRequestMessage" xml:space="preserve">
+    <value>Your request has the following errors: </value>
+  </data>
+  <data name="XMLButtonCaption" xml:space="preserve">
+    <value>Load filtered data to XML file</value>
   </data>
 </root>
