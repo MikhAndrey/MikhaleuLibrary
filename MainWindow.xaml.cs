@@ -63,9 +63,17 @@ namespace MikhaleuLibrary
 
         public ObservableCollection<ReadFromFileError> _errors = new();
 
+        private const string _errorsFilePath = _userFilesDirectoryPath + _pathSeparator + FileConstants.ErrorsFileName;
+
+        private const string _userFilesDirectoryPath = FileConstants.UserFilesDirectoryPath + FileConstants.UserFilesDirectoryName;
+
         private List<string> _alreadyReadFileNames = new();
 
-        private List<Book> _filteredBooks;
+        private List<Book> _filteredBooks = new();
+
+        private List<Book> _booksFromFile = new();
+
+        private const string _pathSeparator = "/";
 
         private void UpdateErrorsViewVisibility()
         {
@@ -93,24 +101,20 @@ namespace MikhaleuLibrary
             }
         }
 
-        private async void Load_From_DB_Button_Click(object sender, RoutedEventArgs e)
-        {
+        private bool IsPreparationForDataLoadSuccessful() {
             if (_alreadyReadFileNames.Contains(_sourceFileName))
             {
                 MessageBoxResult loadFileConfirm = MessageBox.Show(Messages.FileWasReadBefore,
-                            Messages.ReadFromFileErrorWarning,
-                            MessageBoxButton.YesNo,
-                            MessageBoxImage.Question);
+                    Messages.ReadFromFileErrorWarning,
+                    MessageBoxButton.YesNo,
+                    MessageBoxImage.Question);
                 if (loadFileConfirm == MessageBoxResult.No)
-                    return;
+                    return false;
             }
-            loadToDBButton.IsEnabled = false;
-            _errors.Clear();
-            const string userFilesDirectoryPath = FileConstants.UserFilesDirectoryPath + FileConstants.UserFilesDirectoryName;
             try
             {
-                if (!Directory.Exists(userFilesDirectoryPath))
-                    Directory.CreateDirectory(userFilesDirectoryPath);
+                if (!Directory.Exists(_userFilesDirectoryPath))
+                    Directory.CreateDirectory(_userFilesDirectoryPath);
             }
             catch
             {
@@ -118,20 +122,27 @@ namespace MikhaleuLibrary
                     Messages.DirectoryCreationFaultCaption,
                     MessageBoxButton.OK,
                     MessageBoxImage.Error);
-                return;
+                return false;
             }
-            const string pathSeparator = "/";
-            const string errorsFilePath = userFilesDirectoryPath + pathSeparator + FileConstants.ErrorsFileName;
-            FileToDBSupplier supplier = new();
-            supplier.EndOfFileReached = false;
+            FileToDBSupplier.EndOfFileReached = false;
+            _errors.Clear();
+            _booksFromFile.Clear();
+            return true;
+        }
+
+        private async Task LoadBooksInfoFromFile()
+        {
+            int errorsCount = 0;
             using (StreamReader reader = new(_sourceFileName))
             {
-                using (StreamWriter writer = new(errorsFilePath, false))
+                using (StreamWriter writer = new(_errorsFilePath, false))
                 {
                     int currentRowIndex = 1;
                     try
                     {
                         await writer.WriteLineAsync(DateTime.Now.ToString());
+                        for (int i = 0; i < 1000000; i++)
+                            await writer.WriteLineAsync("Евгения;Ковалева;Максимовна;03.03.1983;Анус Быка;2005");
                     }
                     catch
                     {
@@ -139,7 +150,6 @@ namespace MikhaleuLibrary
                             Messages.WriteToFileErrorDescription,
                             MessageBoxButton.OK,
                             MessageBoxImage.Error);
-                        loadToDBButton.IsEnabled = true;
                         return;
                     }
                     Book? book;
@@ -147,7 +157,7 @@ namespace MikhaleuLibrary
                     {
                         try
                         {
-                            book = await supplier.GetBookFromFile(reader);
+                            book = await FileToDBSupplier.GetBookFromFile(reader);
                         }
                         catch
                         {
@@ -155,45 +165,23 @@ namespace MikhaleuLibrary
                                 Messages.ReadFromFileErrorDescription,
                                 MessageBoxButton.OK,
                                 MessageBoxImage.Error);
-                            loadToDBButton.IsEnabled = true;
                             return;
                         }
-                        if (supplier.EndOfFileReached)
+                        if (book == null)
                         {
-                            MessageBox.Show(Messages.SuccessfulDBWriteMessage + FileConstants.UserFilesDirectoryName + pathSeparator + FileConstants.ErrorsFileName,
-                                Messages.SuccessMessage,
-                                MessageBoxButton.OK,
-                                MessageBoxImage.Information);
-                            _alreadyReadFileNames.Add(_sourceFileName);
-                            loadToDBButton.IsEnabled = true;
-                            UpdateErrorsViewVisibility();
-                            return;
-                        }
-                        if (book != null)
-                        {
-                            try
+                            if (FileToDBSupplier.EndOfFileReached)
                             {
-                                using (IRepository<Book> _booksDB = new BooksRepository())
-                                {
-                                    _booksDB.Add(book);
-                                    _booksDB.Save();
-                                }
-                            }
-                            catch
-                            {
-                                MessageBox.Show(Messages.DatabaseSaveError,
-                                    Messages.DatabaseErrorDescription,
-                                    MessageBoxButton.OK,
-                                    MessageBoxImage.Error);
-                                loadToDBButton.IsEnabled = true;
+                                _alreadyReadFileNames.Add(_sourceFileName);
                                 return;
                             }
-                        }
-                        else
-                        {
                             try
                             {
-                                supplier.WriteErrorsToFile(writer, currentRowIndex, supplier.ConversionErrorDescription);
+                                FileToDBSupplier.WriteErrorsToFile(writer, currentRowIndex, FileToDBSupplier.ConversionErrorDescription);
+                                if (errorsCount <= ViewConstants.MaxDisplayingErrorsNumber)
+                                {
+                                    errorsCount++;
+                                    _errors.Add(new ReadFromFileError(currentRowIndex, FileToDBSupplier.ConversionErrorDescription));
+                                }
                             }
                             catch
                             {
@@ -201,15 +189,58 @@ namespace MikhaleuLibrary
                                     Messages.WriteToFileErrorDescription,
                                     MessageBoxButton.OK,
                                     MessageBoxImage.Error);
-                                loadToDBButton.IsEnabled = true;
                                 return;
                             }
-                            if (currentRowIndex < ViewConstants.MaxDisplayingErrorsNumber)
-                                _errors.Add(new ReadFromFileError(currentRowIndex, supplier.ConversionErrorDescription));
+                        }
+                        else
+                        {
+                            _booksFromFile.Add(book);
                         }
                         currentRowIndex++;
                     }
                 }
+            }
+        }
+
+        private async Task LoadBooksInfoToDB()
+        {
+            try
+            {
+                using (IRepository<Book> _booksDB = new BooksRepository())
+                {
+                    await Task.Run(() =>
+                    {
+                        int booksCount = _booksFromFile.Count;
+                        for (int i=0; i < booksCount; i++)
+                            _booksDB.Add(_booksFromFile[i]);
+                        _booksDB.Save();
+                    });
+                    MessageBox.Show(Messages.SuccessfulDBWriteMessage + FileConstants.UserFilesDirectoryName + 
+                        _pathSeparator + FileConstants.ErrorsFileName,
+                        Messages.SuccessMessage,
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Information);
+                }
+            }
+            catch
+            {
+                MessageBox.Show(Messages.DatabaseSaveError,
+                    Messages.DatabaseErrorDescription,
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+            }
+        }
+
+        private async void Load_From_DB_Button_Click(object sender, RoutedEventArgs e)
+        { 
+            bool CanDataBeLoadedFromFile = IsPreparationForDataLoadSuccessful();
+            if (CanDataBeLoadedFromFile)
+            {
+                loadToDBButton.IsEnabled = false;
+                await LoadBooksInfoFromFile();
+                await LoadBooksInfoToDB();
+                loadToDBButton.IsEnabled = true;
+                UpdateErrorsViewVisibility();
             }
         }
 
@@ -249,26 +280,32 @@ namespace MikhaleuLibrary
                     MessageBoxImage.Error);
                 return;
             }
+            
             using (IRepository<Book> _booksDB = new BooksRepository()) {
                 IEnumerable<Book> booksFromDB;
-                try
+                IEnumerable<Book> localFilteredBooks = null;    
+                await Task.Run(() =>
                 {
-                    booksFromDB = _booksDB.GetAll();
-                }
-                catch
-                {
-                    MessageBox.Show(Messages.DatabaseGetDataError,
-                        Messages.DatabaseErrorDescription,
-                        MessageBoxButton.OK,
-                        MessageBoxImage.Error);
-                    return;
-                }
-                _filteredBooks = booksFromDB.Where(book => (book.FirstName == firstName || firstNameCheck.IsChecked!=true) &&
-                (book.LastName == lastName || lastNameCheck.IsChecked != true) &&
-                (book.Surname == surname || surnameCheck.IsChecked != true) &&
-                (book.BirthDate == correctBirthDate || birthDateCheck.IsChecked != true) &&
-                (book.BookName == bookName || bookNameCheck.IsChecked != true) &&
-                (book.BookYear == correctBookYear || bookYearCheck.IsChecked != true)).ToList();
+                    try
+                    {
+                        booksFromDB = _booksDB.GetAll();
+                    }
+                    catch
+                    {
+                        MessageBox.Show(Messages.DatabaseGetDataError,
+                            Messages.DatabaseErrorDescription,
+                            MessageBoxButton.OK,
+                            MessageBoxImage.Error);
+                        return;
+                    }
+                    localFilteredBooks = booksFromDB.Where(book => (book.FirstName == firstName || firstNameCheck.IsChecked != true) &&
+                    (book.LastName == lastName || lastNameCheck.IsChecked != true) &&
+                    (book.Surname == surname || surnameCheck.IsChecked != true) &&
+                    (book.BirthDate == correctBirthDate || birthDateCheck.IsChecked != true) &&
+                    (book.BookName == bookName || bookNameCheck.IsChecked != true) &&
+                    (book.BookYear == correctBookYear || bookYearCheck.IsChecked != true));
+                });         
+                _filteredBooks = localFilteredBooks.ToList();
                 MessageBox.Show(Messages.SuccessfulDataFiltration,
                     Messages.SuccessMessage,
                     MessageBoxButton.OK,
@@ -292,11 +329,10 @@ namespace MikhaleuLibrary
 
         private void Load_To_Excel_Button_Click(object sender, RoutedEventArgs e)
         {
-            const string userFilesDirectoryPath = FileConstants.UserFilesDirectoryPath + FileConstants.UserFilesDirectoryName;
             try
             {
-                if (!Directory.Exists(userFilesDirectoryPath))
-                    Directory.CreateDirectory(userFilesDirectoryPath);
+                if (!Directory.Exists(_userFilesDirectoryPath))
+                    Directory.CreateDirectory(_userFilesDirectoryPath);
             }
             catch
             {
@@ -307,7 +343,7 @@ namespace MikhaleuLibrary
                 return;
             }
             const string pathSeparator = "/";
-            const string ExcelFilePath = userFilesDirectoryPath + pathSeparator + FileConstants.ExcelFileName;
+            const string ExcelFilePath = _userFilesDirectoryPath + pathSeparator + FileConstants.ExcelFileName;
             try{
                 FileHandler.AddBooksToExcelFile(_filteredBooks, ExcelFilePath);
             }
@@ -327,11 +363,10 @@ namespace MikhaleuLibrary
 
         private void Load_To_XML_Button_Click(object sender, RoutedEventArgs e)
         {
-            const string userFilesDirectoryPath = FileConstants.UserFilesDirectoryPath + FileConstants.UserFilesDirectoryName;
             try
             {
-                if (!Directory.Exists(userFilesDirectoryPath))
-                    Directory.CreateDirectory(userFilesDirectoryPath);
+                if (!Directory.Exists(_userFilesDirectoryPath))
+                    Directory.CreateDirectory(_userFilesDirectoryPath);
             }
             catch
             {
@@ -342,7 +377,7 @@ namespace MikhaleuLibrary
                 return;
             }
             const string pathSeparator = "/";
-            const string xmlFilePath = userFilesDirectoryPath + pathSeparator + FileConstants.XmlFileName;
+            const string xmlFilePath = _userFilesDirectoryPath + pathSeparator + FileConstants.XmlFileName;
             try
             {
                 FileHandler.AddBooksToXMLFile(_filteredBooks, xmlFilePath);

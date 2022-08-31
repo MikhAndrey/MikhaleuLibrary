@@ -8,17 +8,17 @@ using MikhaleuLibrary.Utils;
 
 namespace MikhaleuLibrary.Services
 {
-    public class FileToDBSupplier
+    public static class FileToDBSupplier
     {
-        public string? ConversionErrorDescription = null;
+        public static string? ConversionErrorDescription = null;
 
-        public bool EndOfFileReached;
+        public static bool EndOfFileReached;
 
-        private char _adjacentFieldsSeparator = FileConstants.AdjacentFieldsSeparator;
+        private static char _adjacentFieldsSeparator = FileConstants.AdjacentFieldsSeparator;
 
-        private char _errorMessagesSeparator = FileConstants.ErrorMessagesSeparator;
+        private static char _errorMessagesSeparator = FileConstants.ErrorMessagesSeparator;
 
-        public async Task<Book?> GetBookFromFile(StreamReader reader)
+        public static async Task<Book?> GetBookFromFile(StreamReader reader)
         {
             string? posiibleBookItem = await FileHandler.ReadStringFromTextFile(reader);
             if (posiibleBookItem == null)
@@ -43,8 +43,8 @@ namespace MikhaleuLibrary.Services
                     bookYear);
         }
 
-        public async void WriteErrorsToFile(StreamWriter errorsWriter, int rowIndex, string errorMessage) {
-            FileHandler.WriteStringToTextFile(errorsWriter, rowIndex.ToString() + FileConstants.ErrorContentSeparator + errorMessage);
+        public static async void WriteErrorsToFile(StreamWriter errorsWriter, int rowIndex, string errorMessage) {
+            await Task.Run(()=>FileHandler.WriteStringToTextFile(errorsWriter, rowIndex.ToString() + FileConstants.ErrorContentSeparator + errorMessage));
         }
     }
 }
