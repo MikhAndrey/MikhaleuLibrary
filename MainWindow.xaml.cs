@@ -141,8 +141,6 @@ namespace MikhaleuLibrary
                     try
                     {
                         await writer.WriteLineAsync(DateTime.Now.ToString());
-                        for (int i = 0; i < 1000000; i++)
-                            await writer.WriteLineAsync("Евгения;Ковалева;Максимовна;03.03.1983;Анус Быка;2005");
                     }
                     catch
                     {
